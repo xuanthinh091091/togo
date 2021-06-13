@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -16,7 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatal("error opening db", err)
 	}
-
+	fmt.Println("started")
 	http.ListenAndServe(":5050", &services.ToDoService{
 		JWTKey: "wqGyEBBfPK9w3Lxw",
 		Store: &sqllite.LiteDB{

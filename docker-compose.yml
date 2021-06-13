@@ -1,0 +1,34 @@
+version: '3'
+services:  
+  api:
+    container_name: api
+    build: .
+    ports: 
+      - 5050:5050 
+    restart: on-failure
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/togo?sslmode=disable
+    networks:
+      - mynetworks
+
+  db:
+    container_name: dbpostgress
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: togo
+    networks: 
+      - mynetworks
+               
+# Networks to be created to facilitate communication between containers
+networks:
+  mynetworks:
+    driver: bridge
